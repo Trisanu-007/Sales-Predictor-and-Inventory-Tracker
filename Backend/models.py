@@ -42,25 +42,27 @@ class Order:
         self.paid_at_date = json_dict["paid_at_date"]
         self.paid_at_time = json_dict["paid_at_time"]
         
-    
-    def add_detail(self,detail):
-        for item in items:
-            detail = Order_Detail(item)
-            self.details.append(detail)
+        def add_details():
+            for item in json_dict["items"]:
+                if item.strip():
+                    detail = Order_Detail(order_id=self.order_id,product_sku=item)
+                    self.details.append(detail)
+
+        add_details()
 
 class Order_Detail:
     order_id = None
     product_sku = None
     order_detail_id = None
+    quantity = 1
 
     def __init__(self,*args,**kwargs):
         if len(args) == 0:
             self.order_id = kwargs["order_id"]
             self.product_sku = kwargs["product_sku"]
-            self.order_detail_id = kwargs["order_detail_id"]
         else:
             self.build_object(args[0])
     
     def build_object(self,json_dict):
-        self.order_id = json_dict["order_id"]
+        self.quantity = json_dict["quantity"]
         self.product_sku = json_dict["product_sku"]        

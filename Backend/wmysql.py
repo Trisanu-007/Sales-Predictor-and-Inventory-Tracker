@@ -81,8 +81,8 @@ class sql_queries():
         self.declare_table("orders", [
             "customer_name VARCHAR(50) NOT NULL",
             "order_id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-            "paid_at_date VARCHAR(5) NOT NULL",
-            "paid_at_time VARCHAR(5) NOT NULL",
+            "paid_at_date VARCHAR(10) NOT NULL",
+            "paid_at_time VARCHAR(8) NOT NULL",
             "trained BOOLEAN DEFAULT FALSE"
         ])
     
@@ -106,7 +106,7 @@ class sql_queries():
         self.wsql.execute("INSERT INTO orders (customer_name,order_id,paid_at_date,paid_at_time,trained) VALUES (%s,%s,%s,%s,%s)",order.customer_name,order.order_id,order.paid_at_date,order.paid_at_time,order.trained)
 
     def add_order_details(self,order_detail:Order_Detail):
-        self.wsql.execute("INSERT INTO order_details (order_detail_id,order_id,product_sku) VALUES (%s,%s,%s)",order_detail.order_detail_id,order_detail.order_id,order_detail.product_sku)
+        self.wsql.execute("INSERT INTO order_details (order_id,product_sku) VALUES (%s,%s)",order_detail.order_id,order_detail.product_sku)
 
     def get_order(self,order_id):
         result = self.wsql.execute("SELECT * FROM orders WHERE order_id=%s",order_id)[0] 

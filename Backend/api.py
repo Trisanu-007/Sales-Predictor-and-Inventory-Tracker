@@ -4,13 +4,12 @@ from sqldb import sqldb
 
 app = Flask(__name__)
 
-@app.route("/order/<order id>",methods=["GET","POST","DELETE"])
-def add_order(order_id=None):
+@app.route("/order/<int:order_id>",methods=["GET","POST","DELETE"])
+def crud_order(order_id=None):
     if request.method == "POST":
         data = request.json(force=True)
         
         order = Order(data)
-        order_details = Order_Detail(data)
 
         sqldb.add_order(order)
         sqldb.add_order_details(order)
@@ -20,6 +19,19 @@ def add_order(order_id=None):
         
     elif request.method == "DELETE":
         sqldb.delete_order(order_id)
+
+@app.route("/order/bulk",methods=["POST","DELETE"])
+def bulk_order():
+    if request.method == "POST":
+        data_list = request.json(force=True)
+        for data in data_list:
+            order = Order(data)
+
+            sqldb.add_order(order)
+            sqldb.add_order_details(order)    
+    elif request.method == "DELETE":
+        for data in data_list:
+            sqldb.delete_order(data)
 
 @app.route("/add_product",methods=["POST"])
 def add_product():
